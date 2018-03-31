@@ -1,0 +1,6 @@
+[package]
+name = "fritz_os"
+version = "0.1.0"
+authors = ["Fritz Psiorz <fpz@posteo.de>"]
+
+[dependencies]
