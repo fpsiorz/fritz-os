@@ -3,4 +3,10 @@ name = "fritz_os"
 version = "0.1.0"
 authors = ["Fritz Psiorz <fpz@posteo.de>"]
 
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+
 [dependencies]
