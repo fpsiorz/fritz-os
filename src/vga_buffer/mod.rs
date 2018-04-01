@@ -1,3 +1,5 @@
+mod codepage437;
+
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 #[repr(u8)]
@@ -76,9 +78,11 @@ impl Writer {
             '\t' => while self.col_pos % 8 != 0 {
                 self.write_byte(b' ');
             },
-            ' '...'~' => self.write_byte(character as u8),
-            _ => self.write_byte(6), // spades symbol because why not
-            // TODO actually translate symbols that are in codepage 437
+            _ => {
+                // spades symbol for unknown character
+                let b = codepage437::encode(character).unwrap_or(6);
+                self.write_byte(b);
+            },
         }
     }
 
@@ -98,6 +102,7 @@ impl Writer {
         self.col_pos = 0;
     }
 }
+
 
 use core::fmt;
 

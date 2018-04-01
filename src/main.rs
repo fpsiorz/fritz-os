@@ -15,6 +15,7 @@ mod vga_buffer;
 #[no_mangle]
 pub extern fn _start() -> ! {
     println!("Fritz OS");
+    println!("Schöne Grüße!");
     loop {}
 }
 
