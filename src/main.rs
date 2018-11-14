@@ -12,18 +12,23 @@ extern crate spin;
 extern crate bootloader;
 extern crate array_init;
 #[cfg(test)] extern crate std;
+extern crate uart_16550;
+
 
 
 use core::panic::PanicInfo;
 
 #[macro_use]
 mod vga_buffer;
+#[macro_use]
+mod serial;
 
 #[cfg(not(test))]
 #[no_mangle]
 pub extern fn _start() -> ! {
     println!("Fritz OS");
     println!("Schöne Grüße! ☺");
+    serial_println!("Auch seriell, schöne Grüße ♥");
     loop {}
 }
 
