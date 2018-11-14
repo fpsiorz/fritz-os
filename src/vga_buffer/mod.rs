@@ -22,7 +22,7 @@ pub enum Color {
     White      = 15,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 struct ColorCode(u8);
 
 impl ColorCode {
@@ -31,7 +31,7 @@ impl ColorCode {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 struct ScreenChar {
     character: u8,
     color_code: ColorCode,
@@ -138,3 +138,64 @@ pub fn print(args: fmt::Arguments) {
     WRITER.lock().write_fmt(args).unwrap();
 }
 
+#[cfg(test)]
+mod test {
+	use super::*;
+
+    fn construct_writer() -> Writer {
+        use std::boxed::Box;
+
+        Writer {
+            col_pos: 0,
+            color_code: ColorCode::new(Color::White, Color::Black),
+            buffer: Box::leak(Box::new(construct_buffer())),
+        }
+    }
+
+    fn empty_char() -> ScreenChar {
+        ScreenChar{
+            character: b' ',
+            color_code: ColorCode::new(Color::Black, Color::Black),
+        }
+    }
+
+    fn construct_buffer() -> Buffer {
+        use array_init::array_init;
+
+        let blank = empty_char();
+
+        Buffer {
+            chars: array_init(|_| array_init(|_| Volatile::new(blank))),
+        }
+    }
+
+    #[test]
+    fn write_formatted() {
+        use core::fmt::Write;
+
+        let mut writer = construct_writer();
+        writeln!(&mut writer, "a").unwrap();
+        writeln!(&mut writer, "b{}", "c").unwrap();
+
+        for (i, row) in writer.buffer.chars.iter().enumerate() {
+            for (j, screen_char) in row.iter().enumerate() {
+                let screen_char = screen_char.read();
+                if i == BUFFER_HEIGHT - 3 && j == 0 {
+                    assert_eq!(screen_char.character, b'a');
+                    assert_eq!(screen_char.color_code, writer.color_code);
+                } else if i == BUFFER_HEIGHT - 2 && j == 0 {
+                    assert_eq!(screen_char.character, b'b');
+                    assert_eq!(screen_char.color_code, writer.color_code);
+                } else if i == BUFFER_HEIGHT - 2 && j == 1 {
+                    assert_eq!(screen_char.character, b'c');
+                    assert_eq!(screen_char.color_code, writer.color_code);
+                } else if i >= BUFFER_HEIGHT - 2 {
+                    assert_eq!(screen_char.character, b' ');
+                    assert_eq!(screen_char.color_code, writer.color_code);
+                } else {
+                    assert_eq!(screen_char, empty_char());
+                }
+            }
+        }
+    }
+}
