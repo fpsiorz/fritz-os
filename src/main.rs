@@ -8,6 +8,10 @@ extern crate rlibc;
 extern crate volatile;
 #[macro_use] extern crate lazy_static;
 extern crate spin;
+extern crate bootloader;
+
+
+use core::panic::PanicInfo;
 
 #[macro_use]
 mod vga_buffer;
@@ -19,11 +23,10 @@ pub extern fn _start() -> ! {
     loop {}
 }
 
-#[lang = "panic_fmt"]
-#[no_mangle]
-pub extern fn rust_begin_panic(msg: core::fmt::Arguments, file: &'static str, line: u32, column: u32) -> ! {
-    use core::fmt::Write;
-    print!("PANIC at {}:{}:{}: ", file, line, column);
-    vga_buffer::WRITER.lock().write_fmt(msg).unwrap();
+#[panic_handler]
+pub extern fn panic(_info: &PanicInfo) -> ! {
+    //use core::fmt::Write;
+    //print!("PANIC at {}:{}:{}: ", file, line, column);
+    //vga_buffer::WRITER.lock().write_fmt(msg).unwrap();
     loop{}
 }
