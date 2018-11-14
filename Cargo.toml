@@ -21,3 +21,6 @@ panic = "abort"
 
 [profile.release]
 panic = "abort"
+
+[package.metadata.bootimage]
+default-target = "x86_64-fritz_os.json"
