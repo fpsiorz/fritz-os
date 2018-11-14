@@ -24,9 +24,7 @@ pub extern fn _start() -> ! {
 }
 
 #[panic_handler]
-pub extern fn panic(_info: &PanicInfo) -> ! {
-    //use core::fmt::Write;
-    //print!("PANIC at {}:{}:{}: ", file, line, column);
-    //vga_buffer::WRITER.lock().write_fmt(msg).unwrap();
+pub extern fn panic(info: &PanicInfo) -> ! {
+    println!("{}", info);
     loop{}
 }
