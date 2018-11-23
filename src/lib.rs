@@ -1,4 +1,5 @@
 #![no_std]
+#![feature(abi_x86_interrupt)]
 
 extern crate rlibc;
 extern crate volatile;
@@ -13,8 +14,9 @@ extern crate x86_64;
 #[cfg(test)] extern crate std;
 
 
-pub mod vga_buffer;
+#[macro_use]pub mod vga_buffer;
 pub mod serial;
+pub mod interrupts;
 
 pub unsafe fn exit_qemu() {
     use x86_64::instructions::port::Port;

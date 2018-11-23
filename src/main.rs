@@ -17,6 +17,9 @@ pub extern fn _start() -> ! {
     println!("Schöne Grüße! ☺");
     serial_println!("Auch seriell, schöne Grüße ♥");
     unsafe{ fritz_os::exit_qemu() };
+    fritz_os::interrupts::init_idt();
+    x86_64::instructions::int3();
+    println!("No crash");
     loop {}
 }
 
