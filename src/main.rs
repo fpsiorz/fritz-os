@@ -16,17 +16,22 @@ pub extern fn _start() -> ! {
     println!("Fritz OS");
     println!("Schöne Grüße! ☺");
     serial_println!("Auch seriell, schöne Grüße ♥");
-    unsafe{ fritz_os::exit_qemu() };
+    fritz_os::gdt::init();
     fritz_os::interrupts::init_idt();
-    x86_64::instructions::int3();
+
+    fn overflow() {
+        overflow();
+    }
+
+    overflow();
     println!("No crash");
-    loop {}
+    fritz_os::halt_loop();
 }
 
 #[cfg(not(test))]
 #[panic_handler]
 pub extern fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop{}
+    fritz_os::halt_loop();
 }
 

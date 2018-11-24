@@ -63,6 +63,6 @@ pub extern fn _start() -> ! {
 pub extern fn panic(info: &PanicInfo) -> ! {
     serial_println!("{}", info);
     unsafe { fritz_os::exit_qemu() };
-    loop{x86_64::instructions::hlt();}
+    fritz_os::halt_loop();
 }
 
