@@ -8,6 +8,7 @@ extern crate spin;
 extern crate bootloader;
 extern crate uart_16550;
 extern crate x86_64;
+extern crate pic8259_simple;
 
 
 #[cfg(test)] extern crate array_init;

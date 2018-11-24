@@ -19,12 +19,11 @@ pub extern fn _start() -> ! {
     fritz_os::gdt::init();
     fritz_os::interrupts::init_idt();
 
-    fn overflow() {
-        overflow();
-    }
-
-    overflow();
+    x86_64::instructions::interrupts::enable();
     println!("No crash");
+    loop {
+        print!("X");
+    }
     fritz_os::halt_loop();
 }
 
