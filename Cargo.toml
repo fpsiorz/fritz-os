@@ -7,11 +7,12 @@ authors = ["Fritz Psiorz <fpz@posteo.de>"]
 uart_16550 = "0.1.0"
 rlibc = "1.0"
 volatile = "0.2.3"
-spin = "0.4.6"
 bootloader = "0.3.4"
 array-init = "0.0.3"
 x86_64 = "0.2.8"
 pic8259_simple = "0.1.1"
+pc-keyboard = "0.3.1"
+interrupt-lock = { git = "https://github.com/fpsiorz/interrupt-lock"}
 
 
 [dependencies.lazy_static]

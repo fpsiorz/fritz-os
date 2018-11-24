@@ -113,7 +113,7 @@ impl fmt::Write for Writer {
     }
 }
 
-use spin::Mutex;
+use interrupt_lock::Mutex;
 
 lazy_static! {
     pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
