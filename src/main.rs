@@ -21,6 +21,7 @@ pub extern fn _start() -> ! {
 
     x86_64::instructions::interrupts::enable();
     println!("No crash");
+    fritz_os::paging::print_table();
     fritz_os::halt_loop();
 }
 
