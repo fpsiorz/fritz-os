@@ -14,7 +14,7 @@ extern crate lazy_static;
 
 use core::panic::PanicInfo;
 use core::sync::atomic::{AtomicUsize, Ordering};
-use x86_64::structures::idt::{InterruptDescriptorTable, ExceptionStackFrame};
+use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 
 
 static BREAKPOINT_COUNT: AtomicUsize = AtomicUsize::new(0);
@@ -26,7 +26,7 @@ lazy_static!{
     };
 }
 
-extern "x86-interrupt" fn breakpoint_handler(_: &mut ExceptionStackFrame) {
+extern "x86-interrupt" fn breakpoint_handler(_: &mut InterruptStackFrame) {
     BREAKPOINT_COUNT.fetch_add(1, Ordering::SeqCst);
 }
 
@@ -34,9 +34,9 @@ extern "x86-interrupt" fn breakpoint_handler(_: &mut ExceptionStackFrame) {
 #[no_mangle]
 pub extern fn _start() -> ! {
     TEST_IDT.load();
-    x86_64::instructions::int3();
-    x86_64::instructions::int3();
-    x86_64::instructions::int3();
+    x86_64::instructions::interrupts::int3();
+    x86_64::instructions::interrupts::int3();
+    x86_64::instructions::interrupts::int3();
 
     match BREAKPOINT_COUNT.load(Ordering::SeqCst) {
         0 => {

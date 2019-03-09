@@ -7,18 +7,20 @@
 
 #[macro_use]
 extern crate fritz_os;
+extern crate bootloader;
 
 use core::panic::PanicInfo;
 
 #[cfg(not(test))]
 #[no_mangle]
-pub extern fn _start() -> ! {
+pub extern fn _start(info: &bootloader::bootinfo::BootInfo) -> ! {
     println!("Fritz OS");
     println!("Schöne Grüße! ☺");
     serial_println!("Auch seriell, schöne Grüße ♥");
     fritz_os::gdt::init();
     fritz_os::interrupts::init_idt();
 
+    println!("{:?}", info);
     x86_64::instructions::interrupts::enable();
     println!("No crash");
     fritz_os::paging::print_table();
